@@ -1,0 +1,16 @@
+- name: Creating nomad group
+  group:
+    name: "{{ nomad_group }}"
+    state: present
+  become: true
+  when: nomad_group != 'root'
+
+- name: Creating nomad user
+  user:
+    createhome: false
+    group: "{{ nomad_group }}"
+    name: "{{ nomad_user }}"
+    shell: /bin/false
+    system: true
+  become: true
+  when: nomad_user != 'root'

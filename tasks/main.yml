@@ -1,0 +1,9 @@
+- include_tasks: pre-flight.yml
+
+- include_tasks: user.yml
+
+- include_tasks: install.yml
+
+- include_tasks: config.yml
+
+- include_tasks: service.yml

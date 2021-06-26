@@ -1,0 +1,17 @@
+galaxy_info:
+  author: Alexandre (DaazKu) Chouinard
+  description: Nomad role
+  license: MIT
+  min_ansible_version: "2.10"
+
+  platforms:
+    - name: Debian
+      versions:
+        - stretch
+        - buster
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+
+dependencies: []

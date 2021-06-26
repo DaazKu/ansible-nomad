@@ -1,0 +1,9 @@
+platforms:
+  - name: debian-10
+    groups:
+      - nomad_instances
+    image: jrei/systemd-debian:10
+    command: /lib/systemd/systemd
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true

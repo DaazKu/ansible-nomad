@@ -1,0 +1,9 @@
+platforms:
+  - name: ubuntu-20.04
+    groups:
+      - nomad_instances
+    image: jrei/systemd-ubuntu:20.04
+    command: /lib/systemd/systemd
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true

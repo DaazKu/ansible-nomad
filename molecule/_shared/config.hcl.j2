@@ -1,0 +1,18 @@
+data_dir  = "{{ nomad_data_dir }}"
+
+bind_addr = "0.0.0.0" # the default
+
+server {
+  enabled          = true
+  bootstrap_expect = 1
+}
+
+client {
+  enabled       = true
+}
+
+plugin "raw_exec" {
+  config {
+    enabled = true
+  }
+}

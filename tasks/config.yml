@@ -1,0 +1,49 @@
+- name: Creating nomad configuration directories
+  file:
+    path: "{{ item }}"
+    owner: "{{ nomad_user }}"
+    group: "{{ nomad_group }}"
+    mode: 0770
+    state: directory
+  become: true
+  loop:
+    - "{{ nomad_config_dir }}"
+    - "{{ nomad_extra_config_dir }}"
+
+- name: Creating nomad data directory
+  file:
+    path: "{{ nomad_data_dir }}"
+    owner: "{{ nomad_user }}"
+    group: "{{ nomad_group }}"
+    mode: 0770
+    recurse: true
+    state: directory
+  become: true
+  tags:
+    # `recurse: true` makes idempotency fail in molecule ¯\_(ツ)_/¯
+    - molecule-idempotence-notest
+
+- name: Configuring nomad (main)
+  template:
+    src: "{{ nomad_config_template }}"
+    dest: "{{ nomad_config_dir }}/{{ (nomad_config_template | regex_search('(?:.+/)?(.+?)(?:\\.j2)?$', '\\1'))[0]  }}"
+    owner: "{{ nomad_user }}"
+    group: "{{ nomad_group }}"
+    mode: 0660
+  become: true
+  notify:
+    - restart nomad
+
+- name: Configuring nomad (extra)
+  template:
+    src: "{{ nomad_extra_config_template }}"
+    dest: "{{ nomad_extra_config_dir }}/{{ (nomad_extra_config_template | regex_search('(?:.+/)?(.+?)(?:\\.j2)?$', '\\1'))[0] }}"
+    owner: "{{ nomad_user }}"
+    group: "{{ nomad_group }}"
+    mode: 0660
+  become: true
+  loop: "{{ nomad_extra_config_templates }}"
+  loop_control:
+    loop_var: nomad_extra_config_template
+  notify:
+    - restart nomad

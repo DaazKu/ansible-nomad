@@ -1,0 +1,40 @@
+scenario:
+  test_sequence:
+    - lint
+    - syntax
+    - create
+    - prepare
+    - converge
+    - idempotence
+    - verify
+    - destroy
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+  flake8
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      deprecation_warnings: false
+      callback_whitelist: timer,profile_tasks
+      fact_caching: jsonfile
+      fact_caching_connection: ./cache
+      forks: 100
+    connection:
+      pipelining: true
+  playbooks:
+    prepare: ../_shared/prepare.yml
+    converge: ../_shared/converge.yml
+  inventory:
+    group_vars:
+      nomad_instances:
+        nomad_config_template: molecule/_shared/config.hcl.j2
+verifier:
+  name: testinfra
+  directory: ../_shared/tests

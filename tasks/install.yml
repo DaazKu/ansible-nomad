@@ -1,0 +1,11 @@
+- name: Installing HashiCorp Nomad
+  unarchive:
+    remote_src: true
+    src: "https://releases.hashicorp.com/nomad/{{ nomad_version|string }}/nomad_{{ nomad_version|string }}_linux_amd64.zip"
+    dest: "{{ nomad_bin_dir }}/"
+    owner: "{{ nomad_user }}"
+    group: "{{ nomad_group }}"
+    mode: 0770
+  become: true
+  notify:
+    - restart nomad
